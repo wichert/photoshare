@@ -8,9 +8,17 @@ var UploadItem = Backbone.Model.extend({
         var data = new FormData(),
             req = new XMLHttpRequest();
         data.append("file", this.get("file"));
-        req.onprogress = this.updateProgress;
+        req.addEventListener("error", this.onError, false);
+        req.addEventListener("load", this.onComplete, false);
+        req.addEventListener("progress", this.updateProgress, false);
         req.open("POST", upload_url);
         req.send();
+    },
+
+    onError: function(event) {
+    },
+
+    onComplete: function(event) {
     },
 
     updateProgress: function(event) {
