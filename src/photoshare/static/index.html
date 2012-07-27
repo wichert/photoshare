@@ -1,0 +1,71 @@
+<!DOCYPE html>
+<html lang="en">
+  <head>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <a class="brand" href="/">PhotoShare</a>
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="/">XYZ</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2">
+          <ul class="nav nav-list">
+            <li class="nav-header">Southern Circle</li>
+            <li><a href="#">Helena</a></li>
+            <li><a href="#">Linn-Marit</a></li>
+            <li><a href="#">Wichert</a></li>
+          </ul>
+        </div>
+        <div class="span10">
+          <div class="pageheader">
+            <h1>Upload photos</h1>
+          </div>
+
+          <div class="well dropbox">
+            Drag and drop photos here to upload.
+          </div>
+
+          <div id="upload-panel">
+            <ul id="upload-queue">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/underscore.js"></script>
+    <script type="text/javascript" src="js/backbone.js"></script>
+    <script type="text/template" id="uploaditem-template">
+      <span class="filename span2"><%= name %></span>
+      <div class="progress progress-striped span7">
+        <div class="bar" style="width: <%= progress %>%;"></div>
+      </div> <strong class="span1"><%= size %></strong>
+    </script>
+    <script type="text/javascript">
+      // <![CDATA[
+      var upload_url = "http://localhost:8080/upload";
+      // ]]>
+    </script>
+    <script type="text/javascript" src="js/photoshare.js"></script>
+  </body>
+</html>

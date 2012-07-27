@@ -1,0 +1,17 @@
+body {
+	padding-top: 50px;
+}
+
+.dropbox.hover {
+	border-style: dashed;
+	border-color: black;
+}
+
+#upload-queue {
+	list-style-type: none;
+	margin-left: 0;
+}
+
+#upload-queue li {
+	clear: left;
+}
