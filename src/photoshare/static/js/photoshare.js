@@ -5,23 +5,34 @@ var UploadItem = Backbone.Model.extend({
           status: "upload"
     },
 
-    upload: function() {
-        var data = new FormData(),
-            req = new XMLHttpRequest();
-        data.append("file", this.get("file"));
-        req.addEventListener("error", _.bind(this.onError, this), false);
-        req.addEventListener("progress", _.bind(this.onProgress, this), false);
-        req.addEventListener("load", _.bind(this.onComplete, this), false);
-        req.open("POST", upload_url);
-        req.send();
+    _makeXHR: function() {
+        var xhr = new XMLHttpRequest(),
+            model = this.context;
+        xhr.upload.addEventListener("progress", _.bind(model.onProgress, model), false);
+        return xhr;
     },
 
-    onError: function(event) {
+    upload: function() {
+        var data = new FormData();
+        data.append("file", this.get("file"));
+        $.ajax(upload_url, {
+            type: "POST",
+            context: this,
+            xhr: this._makeXHR,
+            data: data,
+            processData: false,
+            dataType: "json",
+            error: this.onError,
+            success: this.onSuccess
+        });
+    },
+
+    onError: function(jqXHR, textStatus, errorThrown) {
         console.log("An error occured during upload.");
         this.set({status: "error"});
     },
 
-    onComplete: function(event) {
+    onSuccess: function(data, textStatus, jqXHR) {
         console.log("Upload completed succesfully.");
         this.set({status: "complete"});
     },
