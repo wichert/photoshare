@@ -1,27 +1,32 @@
 var UploadItem = Backbone.Model.extend({
     defaults: {
           file: null,
-          progress: 0
+          progress: 0,
+          status: "upload"
     },
 
     upload: function() {
         var data = new FormData(),
             req = new XMLHttpRequest();
         data.append("file", this.get("file"));
-        req.upload.addEventListener("error", this.onError, false);
-        req.upload.addEventListener("load", this.onComplete, false);
-        req.upload.addEventListener("progress", this.updateProgress, false);
+        req.addEventListener("error", _.bind(this.onError, this), false);
+        req.addEventListener("progress", _.bind(this.onProgress, this), false);
+        req.addEventListener("load", _.bind(this.onComplete, this), false);
         req.open("POST", upload_url);
         req.send();
     },
 
     onError: function(event) {
+        console.log("An error occured during upload.");
+        this.set({status: "error"});
     },
 
     onComplete: function(event) {
+        console.log("Upload completed succesfully.");
+        this.set({status: "complete"});
     },
 
-    updateProgress: function(event) {
+    onProgress: function(event) {
         this.set({progress: (event.loaded / event.total)*100});
     }
 });
@@ -37,6 +42,11 @@ var UploadItemView = Backbone.View.extend({
     tagName: "li",
 
     template: _.template($("#uploaditem-template").html()),
+
+    initialize: function() {
+        this.model.bind("change", this.render, this);
+        this.model.bind("destroy", this.remove, this);
+    },
 
     prettyFilesize: function(size) {
         var units = ["bytes", "kB", "MB", "GB", "TB"], i=0;
