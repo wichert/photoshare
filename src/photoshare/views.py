@@ -8,4 +8,4 @@ def my_view(request):
 
 @view_config(route_name='upload', request_method='POST', renderer='json')
 def upload(request):
-    pass
+    return {'message': 'ok'}
