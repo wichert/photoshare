@@ -32,3 +32,6 @@ After you fix the problem, please restart the Pyramid application to
 try it again.
 """
 
+@view_config(route_name='upload', request_method='POST', renderer='json')
+def upload(request):
+    pass
