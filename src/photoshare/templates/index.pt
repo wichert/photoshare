@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="${asset_url}js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="${asset_url}js/jquery-1.7.2.js"></script>
     <script type="text/javascript" src="${asset_url}bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${asset_url}js/json2.js"></script>
     <script type="text/javascript" src="${asset_url}js/underscore.js"></script>
