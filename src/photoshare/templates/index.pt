@@ -1,9 +1,9 @@
 <!DOCYPE html>
-<html lang="en">
+<html lang="en" tal:define="asset_url request.static_url('photoshare:static/')">
   <head>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="css/style.css" rel="stylesheet"/>
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+    <link href="${asset_url}bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${asset_url}css/style.css" rel="stylesheet"/>
+    <link href="${asset_url}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -50,11 +50,11 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/json2.js"></script>
-    <script type="text/javascript" src="js/underscore.js"></script>
-    <script type="text/javascript" src="js/backbone.js"></script>
+    <script type="text/javascript" src="${asset_url}js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="${asset_url}bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${asset_url}js/json2.js"></script>
+    <script type="text/javascript" src="${asset_url}js/underscore.js"></script>
+    <script type="text/javascript" src="${asset_url}js/backbone.js"></script>
     <script type="text/template" id="uploaditem-template">
       <span class="filename span2"><%= name %></span>
       <div class="progress progress-striped span7">
@@ -63,9 +63,9 @@
     </script>
     <script type="text/javascript">
       // <![CDATA[
-      var upload_url = "http://localhost:8080/upload";
+      var upload_url = "http://localhost:5000/upload";
       // ]]>
     </script>
-    <script type="text/javascript" src="js/photoshare.js"></script>
+    <script type="text/javascript" src="${asset_url}js/photoshare.js"></script>
   </body>
 </html>
