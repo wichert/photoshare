@@ -57,9 +57,13 @@
     <script type="text/javascript" src="${asset_url}js/backbone.js"></script>
     <script type="text/template" id="uploaditem-template">
       <span class="filename span2"><%= name %></span>
-      <div class="progress progress-striped span7">
+      <% if (status==="error") { %>
+        <strong>An error occured while uploading this file.</strong>
+      <% } else { %>
+      <div class="progress<% if (status==='upload') { print(' progress-striped');} %> span7">
         <div class="bar" style="width: <%= progress %>%;"></div>
       </div> <strong class="span1"><%= size %></strong>
+      <% } %>
     </script>
     <script type="text/javascript">
       // <![CDATA[

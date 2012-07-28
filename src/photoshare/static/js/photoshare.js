@@ -63,9 +63,11 @@ var UploadItemView = Backbone.View.extend({
             file = model.get("file");
         $(this.el).html(
             this.template({
+                status: model.get("status"),
                 size: this.prettyFilesize(file.size),
                 name: file.name,
-                progress: model.get("progress")}));
+                progress: model.get("progress")}))
+            .attr("class", model.get("status"));
 
         return this;
     }
