@@ -13,8 +13,8 @@
         <p>Select a person in the left column to view their photos</p>
 
         <div class="alert alert-info">
-          You can also <a href="${request.route_url('upload')}">upload your
-            own photos</a>!
+          You can also <a href="${request.route_url('upload')}"><strong>upload your
+              own photos</strong></a>!
         </div>
       </tal:block>
 
