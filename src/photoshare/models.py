@@ -1,3 +1,5 @@
+from pyramid.security import Allow
+from pyramid.security import Authenticated
 from sqlalchemy import schema
 from sqlalchemy import types
 from sqlalchemy import orm
@@ -9,6 +11,13 @@ class User(meta.BaseObject):
     __tablename__ = 'user'
     id = schema.Column(types.Integer(), primary_key=True)
     name = schema.Column(types.UnicodeText(), unique=True)
+
+    @orm.reconstructor
+    def _reconstruct(self):
+        self.__acl__ = [
+                (Allow, Authenticated, 'authenticated'),
+                (Allow, self.id, 'delete'),
+                ]
 
 
 class Photo(Image):

@@ -1,4 +1,6 @@
 import datetime
+from cStringIO import StringIO
+import zipfile
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import authenticated_userid
 from pyramid.security import remember
@@ -75,18 +77,23 @@ def browse(request):
     return {'users': users(), 'user': None, 'photos': photos}
 
 
-@view_config(route_name='browse-user', permission='authenticated',
-        renderer='templates/browse.pt')
-def browse_user(request):
-    user_id = int(request.matchdict['id'])
-    user = meta.Session.query(User).get(user_id)
-    photos = [photo_info(request, photo) for photo in user.photos]
-    return {'users': users(), 'user': user, 'photos': photos}
+@view_config(route_name='browse-user', context=User,
+        permission='authenticated', renderer='templates/browse.pt')
+def browse_user(context, request):
+    photos = [photo_info(request, photo) for photo in context.photos]
+    return {'users': users(), 'user': context, 'photos': photos}
 
 
-@view_config(route_name='api-photos', permission='authenticated',
-        renderer='json')
-def api_photos(request):
-    user_id = int(request.matchdict['id'])
-    user = meta.Session.query(User).get(user_id)
-    return {'photos': repr(user.photos)}
+@view_config(route_name='download-user', permission='authenticated')
+def download_user(context, request):
+    output = StringIO()
+    zip = zipfile.ZipFile(output, 'w', zipfile.ZIP_STORED)
+    for photo in context.photos:
+        zip.write(photo.filesystem_path)
+    zip.close()
+    output.seek(0)
+    response = request.response
+    response.content_disposition = 'attachment; filename=%s.zip' % \
+            context.name.encode('utf8')
+    response.body_file = output
+    return response

@@ -14,6 +14,7 @@
 
       <tal:block condition="user is not None">
         <h1>${user.name}</h1>
+        <p><a tal:condition="photos" href="${request.route_url('download-user', id=user.id)}" class="btn btn-large"><i class="icon-download"></i> Download all photos</a></p>
         <p tal:condition="not photos">${user.name} has not uploaded any photos.</p>
       </tal:block>
 
@@ -25,8 +26,8 @@
               <h5>${photo['date'] if photo['date'] else 'Unknown date'}</h5>
               <p>Uploaded by ${photo['user']}</p>
               <p>
-                <a class="btn btn-primary" href="${photo['download']}"><i class="icon-zoom-in"></i> View</a>
-                <a class="btn" href="${photo['download']}"><i class="icon-download"></i> Download</a>
+                <a class="btn btn-mini" href="${photo['download']}"><i class="icon-download"></i> Download</a>
+                <a class="btn btn-mini btn-danger" href="${photo['download']}"><i class="icon-remove"></i> Delete</a>
               </p>
             </div>
           </div>
