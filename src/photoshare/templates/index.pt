@@ -97,7 +97,7 @@ l
     </script>
     <script type="text/javascript">
       // <![CDATA[
-      var upload_url = "http://localhost:5000/upload";
+      var upload_url = "${request.route_url('upload')}";
       // ]]>
     </script>
     <script type="text/javascript" src="${asset_url}js/photoshare.js"></script>
