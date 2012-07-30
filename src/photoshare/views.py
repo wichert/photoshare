@@ -59,7 +59,7 @@ def upload(request):
     upload.file.seek(0)
     img = PIL.Image.open(upload.file)
     if hasattr(img, '_getexif'):
-        tags = img._getexif()
+        tags = img._getexif() or {}
         for date_tag in [36867, 36868, 306]:  # Possible timestamps
             value = tags.get(date_tag)
             if value is not None:
