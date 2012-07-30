@@ -15,6 +15,14 @@ def users():
     return users
 
 
+def photo_info(request, photo):
+    static_url = request.static_url
+    return {'download': static_url(photo.filesystem_path),
+            'thumbnail': static_url(photo.scale(width=260, height=180, crop=True).filesystem_path),
+            'date': photo.exif_date.strftime('%m %B %Y at %H:%M') if photo.exif_date else None,
+            'user': photo.user.name}
+
+
 @forbidden_view_config(renderer='templates/login.pt')
 def forbidden(request):
     if request.method == 'POST':
@@ -62,7 +70,9 @@ def upload(request):
 @view_config(route_name='browse', permission='authenticated',
         renderer='templates/browse.pt')
 def browse(request):
-    return {'users': users(), 'user': None}
+    query = meta.Session.query(Photo).order_by(Photo.id.desc()).limit(12)
+    photos = [photo_info(request, photo) for photo in query]
+    return {'users': users(), 'user': None, 'photos': photos}
 
 
 @view_config(route_name='browse-user', permission='authenticated',
@@ -70,11 +80,7 @@ def browse(request):
 def browse_user(request):
     user_id = int(request.matchdict['id'])
     user = meta.Session.query(User).get(user_id)
-    static_url = request.static_url
-    photos = [{'download': static_url(photo.filesystem_path),
-               'thumbnail': static_url(photo.scale(width=260, height=180, crop=True).filesystem_path),
-               'date': photo.exif_date}
-              for photo in user.photos]
+    photos = [photo_info(request, photo) for photo in user.photos]
     return {'users': users(), 'user': user, 'photos': photos}
 
 

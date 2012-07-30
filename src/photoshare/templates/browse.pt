@@ -1,5 +1,5 @@
 <html tal:define="layout load:layout.pt" metal:use-macro="layout">
-  <div metal:fill-slot="content" class="row-fluid">
+  <div metal:fill-slot="content" class="row">
     <div class="span2">
       <ul class="nav nav-list">
         <li class="nav-header">Southern Circle</li>
@@ -8,29 +8,30 @@
     </div>
     <div class="span10">
       <tal:block condition="user is None">
-        <h1>Browse photos</h1>
+        <h1>Latest photos</h1>
         <p>Select a person in the left column to view their photos</p>
       </tal:block>
 
       <tal:block condition="user is not None">
         <h1>${user.name}</h1>
         <p tal:condition="not photos">${user.name} has not uploaded any photos.</p>
-
-        <ul tal:condition="photos" class="thumbnails">
-          <li tal:repeat="photo photos" class="span3">
-            <div class="thumbnail">
-              <img src="${photo['thumbnail']}" alt=""/>
-              <div class="caption">
-                <h5>${photo['date'] if photo['date'] else 'Unknown date'}</h5>
-                <p>
-                  <a class="btn btn-primary" href="${photo['download']}"><i class="icon-zoom-in"></i>View</a>
-                  <a class="btn" href="${photo['download']}"><i class="icon-download"></i>Download</a>
-                </p>
-              </div>
-            </div>
-          </li>
-        </ul>
       </tal:block>
+
+      <ul tal:condition="photos" class="thumbnails">
+        <li tal:repeat="photo photos" class="span3">
+          <div class="thumbnail">
+            <img src="${photo['thumbnail']}" alt=""/>
+            <div class="caption">
+              <h5>${photo['date'] if photo['date'] else 'Unknown date'}</h5>
+              <p>Uploaded by ${photo['user']}</p>
+              <p>
+                <a class="btn btn-primary" href="${photo['download']}"><i class="icon-zoom-in"></i> View</a>
+                <a class="btn" href="${photo['download']}"><i class="icon-download"></i> Download</a>
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
   <script type="text/javascript" src="${asset_url}js/browse.js"></script>
