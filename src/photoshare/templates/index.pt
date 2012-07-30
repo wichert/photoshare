@@ -17,21 +17,29 @@
           </button>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="/">XYZ</a></li>
+              <li><a href="/browse">Browse</a></li>
+              <li><a href="/upload">Upload</a></li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid">
+    <div id="content">
+    </div>
+
+    <script type="text/javascript" src="${asset_url}js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="${asset_url}bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${asset_url}js/json2.js"></script>
+    <script type="text/javascript" src="${asset_url}js/underscore.js"></script>
+    <script type="text/javascript" src="${asset_url}js/backbone.js"></script>
+
+    <script type="text/template" id="app-auth-template">
       <div class="row-fluid">
         <div class="span2">
           <ul class="nav nav-list">
             <li class="nav-header">Southern Circle</li>
-            <li><a href="#">Helena</a></li>
-            <li><a href="#">Linn-Marit</a></li>
-            <li><a href="#">Wichert</a></li>
+            <li tal:repeat="user users"><a href="${request.route_url('browse-user', id=user.id)}">${user.name}</a></li>
           </ul>
         </div>
         <div class="span10">
@@ -49,12 +57,34 @@
           </div>
         </div>
       </div>
-    </div>
-    <script type="text/javascript" src="${asset_url}js/jquery-1.7.2.js"></script>
-    <script type="text/javascript" src="${asset_url}bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${asset_url}js/json2.js"></script>
-    <script type="text/javascript" src="${asset_url}js/underscore.js"></script>
-    <script type="text/javascript" src="${asset_url}js/backbone.js"></script>
+    </script>
+l
+    <script type="text/template" id="notfound-template">
+      <h1>Oops</h1>
+      <p>
+        The page you requested could not be found.
+      </p>
+    </script>
+
+    <script type="text/template" id="app-anon-template">
+      <h1>Who are you?</h1>
+      <form class="well form-horizontal">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="login">My name is</label>
+            <div class="controls">
+              <select id="login">
+                <option tal:repeat="user users" value="${user.id}">${user.name}</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary">Login</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </script>
+
     <script type="text/template" id="uploaditem-template">
       <span class="filename span2"><%= name %></span>
       <% if (status==="error") { %>

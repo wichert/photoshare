@@ -129,10 +129,59 @@ var UploadPanelView = Backbone.View.extend({
     }
 });
 
-var AppView = Backbone.View.extend({
-    initialize: function() {
-        this.upload_panel = new UploadPanelView;
+/*
+var PsRouter = Backbone.Router.extend({
+    routes: {
+        "login":  "login",
+        "photos/:name": "showAlbum",
+        "upload": "upload",
+        "*default": "unknown"
+    },
+
+
+    unknown: function() {
+        App.navigate("login", {trigger: true, replace: true});
+    },
+
+    login: function() {
     }
 });
 
-var App = new AppView;
+var Router = new PsRouter();
+*/
+
+var PsView = Backbone.View.extend({
+    status: "upload",
+
+    el: $("#content"),
+
+    anon_template: _.template($("#app-anon-template").html()),
+    auth_template: _.template($("#app-auth-template").html()),
+
+    initialize: function() {
+        this.upload_panel = new UploadPanelView;
+        this.render();
+/*        Router.on("route:upload", function() {
+            this.status = "upload";
+            this.render();
+        }, this);
+*/
+    },
+
+    render: function() {
+	if (this.status=== "login") {
+            this.$el
+                .html(this.anon_template({}))
+                .attr("class", "container");
+        } else {
+            this.$el
+                .html(this.auth_template({}))
+                .attr("class", "container-fluid");
+        }
+    }
+});
+
+
+var App = new PsView;
+// Backbone.history.start();
+

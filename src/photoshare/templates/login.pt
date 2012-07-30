@@ -1,0 +1,20 @@
+<html tal:define="layout load:layout.pt" metal:use-macro="layout">
+  <div metal:fill-slot="content" class="container">
+    <h1>Who are you?</h1>
+    <form class="well form-horizontal" method="POST">
+      <fieldset>
+        <div class="control-group">
+          <label class="control-label" for="login">My name is</label>
+          <div class="controls">
+            <select id="login">
+              <option tal:repeat="user users" value="${user.id}">${user.name}</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</html>
