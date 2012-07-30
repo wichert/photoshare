@@ -1,22 +1,17 @@
 from sqlalchemy import schema
 from sqlalchemy import types
 from sqlalchemy import orm
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.orderinglist import ordering_list
-from zope.sqlalchemy import ZopeTransactionExtension
-
-DBSession = orm.scoped_session(orm.sessionmaker(
-    extension=ZopeTransactionExtension()))
-Base = declarative_base()
+from s4u.sqlalchemy import meta
 
 
-class User(Base):
+class User(meta.BaseObject):
     __tablename__ = 'user'
     id = schema.Column(types.Integer(), primary_key=True)
     name = schema.Column(types.UnicodeText(), unique=True)
 
 
-class Photo(Base):
+class Photo(meta.BaseObject):
     __tablename__ = 'photo'
 
     id = schema.Column(types.Integer(), primary_key=True)

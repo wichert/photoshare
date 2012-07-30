@@ -2,11 +2,11 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
 from pyramid.view import forbidden_view_config
 from pyramid.view import view_config
-from .models import DBSession
+from s4u.sqlalchemy import meta
 from .models import User
 
 def users():
-    users = DBSession.query(User).all()
+    users = meta.Session.query(User).all()
     users.sort(key=lambda u: u.name)
     return users
 
@@ -50,7 +50,7 @@ def browse(request):
         renderer='templates/browse.pt')
 def browse_user(request):
     user_id = int(request.matchdict['id'])
-    user = DBSession.query(User).get(user_id)
+    user = meta.Session.query(User).get(user_id)
     return {'users': users(), 'user': user, 'photos': []}
 
 
@@ -58,5 +58,5 @@ def browse_user(request):
         renderer='json')
 def api_photos(request):
     user_id = int(request.matchdict['id'])
-    user = DBSession.query(User).get(user_id)
+    user = meta.Session.query(User).get(user_id)
     return {'photos': repr(user.photos)}

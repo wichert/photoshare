@@ -5,8 +5,8 @@ import transaction
 from sqlalchemy import engine_from_config
 from pyramid.paster import get_appsettings
 from pyramid.paster import setup_logging
-from ..models import DBSession
-from ..models import Base
+from s4u.sqlalchemy import init_sqlalchemy
+from s4u.sqlalchemy import meta
 from ..models import User
 
 
@@ -24,19 +24,19 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
-    Base.metadata.create_all(engine)
+    init_sqlalchemy(engine)
+    meta.Session.metadata.create_all(engine)
     with transaction.manager:
-        DBSession.add(User(name=u'Åse'))
-        DBSession.add(User(name=u'Claude'))
-        DBSession.add(User(name=u'Erin'))
-        DBSession.add(User(name=u'Fleur'))
-        DBSession.add(User(name=u'Gustavo'))
-        DBSession.add(User(name=u'Helena'))
-        DBSession.add(User(name=u'Karl-Heinz'))
-        DBSession.add(User(name=u'Lando'))
-        DBSession.add(User(name=u'Linn'))
-        DBSession.add(User(name=u'Marjolein'))
-        DBSession.add(User(name=u'Panikos'))
-        DBSession.add(User(name=u'Rakel'))
-        DBSession.add(User(name=u'Wichert'))
+        meta.Session.add(User(name=u'Åse'))
+        meta.Session.add(User(name=u'Claude'))
+        meta.Session.add(User(name=u'Erin'))
+        meta.Session.add(User(name=u'Fleur'))
+        meta.Session.add(User(name=u'Gustavo'))
+        meta.Session.add(User(name=u'Helena'))
+        meta.Session.add(User(name=u'Karl-Heinz'))
+        meta.Session.add(User(name=u'Lando'))
+        meta.Session.add(User(name=u'Linn'))
+        meta.Session.add(User(name=u'Marjolein'))
+        meta.Session.add(User(name=u'Panikos'))
+        meta.Session.add(User(name=u'Rakel'))
+        meta.Session.add(User(name=u'Wichert'))
