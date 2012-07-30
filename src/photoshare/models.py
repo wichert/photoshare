@@ -16,9 +16,8 @@ class User(meta.BaseObject):
     def _reconstruct(self):
         self.__acl__ = [
                 (Allow, Authenticated, 'authenticated'),
-                (Allow, self.id, 'delete'),
+                (Allow, self.id, 'edit'),
                 ]
-
 
 class Photo(Image):
     exif_date = schema.Column(types.DateTime(timezone=False))
@@ -28,3 +27,10 @@ class Photo(Image):
     user = orm.relationship(User,
             backref=orm.backref('photos',
                 order_by=[exif_date]))
+
+    @orm.reconstructor
+    def _reconstruct(self):
+        self.__acl__ = [
+                (Allow, Authenticated, 'authenticated'),
+                (Allow, self.user_id, ['edit', 'delete']),
+                ]

@@ -4,6 +4,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.security import Allow
 from pyramid.security import Authenticated
 from s4u.sqlalchemy import meta
+from .models import Photo
 from .models import User
 
 
@@ -12,6 +13,11 @@ class DefaultRoot(object):
 
     def __init__(self, request):
         pass
+
+
+def photo_factory(request):
+    photo_id = int(request.matchdict['id'])
+    return meta.Session.query(Photo).get(photo_id)
 
 
 def user_factory(request):
@@ -44,5 +50,9 @@ def main(global_config, **settings):
             factory=user_factory)
     config.add_route('download-user', '/browse/{id:\d+}/download',
             factory=user_factory)
+    config.add_route('download-photo', '/api/photo/{id:\d+}/download',
+            factory=photo_factory)
+    config.add_route('delete-photo', '/api/photo/{id:\d+}/delete',
+            factory=photo_factory)
     config.scan()
     return config.make_wsgi_app()

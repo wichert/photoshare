@@ -14,7 +14,7 @@
 
       <tal:block condition="user is not None">
         <h1>${user.name}</h1>
-        <p><a tal:condition="photos" href="${request.route_url('download-user', id=user.id)}" class="btn btn-large"><i class="icon-download"></i> Download all photos</a></p>
+        <p><a tal:condition="photos" href="${request.route_url('download-user', id=user.id)}" class="btn btn-large"><i class="icon-hdd"></i> Download all photos</a></p>
         <p tal:condition="not photos">${user.name} has not uploaded any photos.</p>
       </tal:block>
 
@@ -24,10 +24,10 @@
             <img src="${photo['thumbnail']}" alt=""/>
             <div class="caption">
               <h5>${photo['date'] if photo['date'] else 'Unknown date'}</h5>
-              <p>Uploaded by ${photo['user']}</p>
+              <p tal:condition="user is None">Uploaded by ${photo['user']}</p>
               <p>
-                <a class="btn btn-mini" href="${photo['download']}"><i class="icon-download"></i> Download</a>
-                <a class="btn btn-mini btn-danger" href="${photo['download']}"><i class="icon-remove"></i> Delete</a>
+                <a class="btn btn-mini" href="${photo['download']}"><i class="icon-hdd"></i> Download</a>
+                <button type="button" class="btn btn-mini btn-danger delete" data-url="${photo['delete']}"><i class="icon-remove"></i> Delete</button>
               </p>
             </div>
           </div>
@@ -35,5 +35,18 @@
       </ul>
     </div>
   </div>
-  <script type="text/javascript" src="${asset_url}js/browse.js"></script>
+  <script metal:fill-slot="scripts" type="text/javascript">
+// <![CDATA[
+  $(document).on("click", "button.delete", function() {
+      var $thumbnail = $(this).closest("li");
+      $.ajax({url: this.dataset.url,
+              type: "DELETE",
+              dataType: "json",
+              success: function(data) {
+                  $thumbnail.fadeOut("fast", $thumbnail.remove);
+              }
+      });
+  });
+// ]]>
+  </script>
 </html>

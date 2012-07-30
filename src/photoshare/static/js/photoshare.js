@@ -109,7 +109,7 @@ var UploadPanelView = Backbone.View.extend({
 
     queueUpload: function(item) {
         var view = new UploadItemView({model: item});
-        $("#upload-queue").prepend(view.render().el);
+        $("#upload-queue").append(view.render().el);
         item.upload();
 
     },

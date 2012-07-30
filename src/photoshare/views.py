@@ -1,6 +1,7 @@
 import datetime
-from cStringIO import StringIO
+import os
 import zipfile
+from cStringIO import StringIO
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import authenticated_userid
 from pyramid.security import remember
@@ -18,9 +19,12 @@ def users():
 
 
 def photo_info(request, photo):
+    route_url = request.route_url
     static_url = request.static_url
-    return {'download': static_url(photo.filesystem_path),
+    return {'full': static_url(photo.filesystem_path),
             'thumbnail': static_url(photo.scale(width=260, height=180, crop=True).filesystem_path),
+            'download': route_url('download-photo', id=photo.id),
+            'delete': route_url('delete-photo', id=photo.id),
             'date': photo.exif_date.strftime('%m %B %Y at %H:%M') if photo.exif_date else None,
             'user': photo.user.name}
 
@@ -93,7 +97,26 @@ def download_user(context, request):
     zip.close()
     output.seek(0)
     response = request.response
+    response.content_type = 'application/zip'
     response.content_disposition = 'attachment; filename=%s.zip' % \
             context.name.encode('utf8')
     response.body_file = output
     return response
+
+
+@view_config(route_name='download-photo', context=Photo,
+        request_method='GET', permission='delete')
+def download_photo(context, request):
+    response = request.response
+    response.content_disposition = 'attachment; filename=%s' % \
+            os.path.basename(context.path)
+    response.body_file = open(context.filesystem_path)
+    return response
+
+
+@view_config(route_name='delete-photo', context=Photo,
+        request_method='DELETE', permission='delete',
+         renderer='json')
+def delete_photo(context, request):
+    meta.Session.delete(context)
+    return {'result': 'ok'}
