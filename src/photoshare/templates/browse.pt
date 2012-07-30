@@ -9,7 +9,13 @@
     <div class="span10">
       <tal:block condition="user is None">
         <h1>Latest photos</h1>
+
         <p>Select a person in the left column to view their photos</p>
+
+        <div class="alert alert-info">
+          You can also <a href="${request.route_url('upload')}">upload your
+            own photos</a>!
+        </div>
       </tal:block>
 
       <tal:block condition="user is not None">

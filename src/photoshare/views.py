@@ -45,7 +45,7 @@ def forbidden(request):
 @view_config(route_name='home', renderer='templates/index.pt',
         permission='authenticated')
 def app(request):
-    return HTTPFound(request.route_url('upload'))
+    return HTTPFound(request.route_url('browse'))
 
 
 @view_config(route_name='upload', renderer='templates/index.pt',
