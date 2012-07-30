@@ -27,7 +27,7 @@
               <p tal:condition="user is None">Uploaded by ${photo['user']}</p>
               <p>
                 <a class="btn btn-mini" href="${photo['download']}"><i class="icon-hdd"></i> Download</a>
-                <button type="button" class="btn btn-mini btn-danger delete" data-url="${photo['delete']}"><i class="icon-remove"></i> Delete</button>
+                <button tal:condition="photo['delete']" type="button" class="btn btn-mini btn-danger delete" data-url="${photo['delete']}"><i class="icon-remove"></i> Delete</button>
               </p>
             </div>
           </div>

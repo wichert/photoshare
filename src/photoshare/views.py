@@ -19,12 +19,14 @@ def users():
 
 
 def photo_info(request, photo):
+    user_id = authenticated_userid(request)
     route_url = request.route_url
     static_url = request.static_url
     return {'full': static_url(photo.filesystem_path),
             'thumbnail': static_url(photo.scale(width=260, height=180, crop=True).filesystem_path),
             'download': route_url('download-photo', id=photo.id),
-            'delete': route_url('delete-photo', id=photo.id),
+            'delete': route_url('delete-photo', id=photo.id)
+                if user_id == photo.user_id else None,
             'date': photo.exif_date.strftime('%m %B %Y at %H:%M') if photo.exif_date else None,
             'user': photo.user.name}
 
