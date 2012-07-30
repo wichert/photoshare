@@ -86,13 +86,13 @@ l
     </script>
 
     <script type="text/template" id="uploaditem-template">
-      <span class="filename span2"><%= name %></span>
+      <span class="filename span2"><%= name %> (<%= size %>)</span>
       <% if (status==="error") { %>
         <strong>An error occured while uploading this file.</strong>
       <% } else { %>
-      <div class="progress<% if (status==='upload') { print(' progress-striped');} %> span7">
+      <div class="progress<% if(status==='processing'){print(' progress-striped active');} %> span7">
         <div class="bar" style="width: <%= progress %>%;"></div>
-      </div> <strong class="span1"><%= size %></strong>
+      </div> <strong class="span1"><% if (status==='upload') {print('Uploading');} else if (status==='processing') {print('Processing');} else {print('Finished');} %></strong>
       <% } %>
     </script>
     <script type="text/javascript">

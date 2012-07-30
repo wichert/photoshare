@@ -20,10 +20,13 @@
           <li tal:repeat="photo photos" class="span3">
             <div class="thumbnail">
               <img src="${photo['thumbnail']}" alt=""/>
-              <p>
-                <a class="btn btn-primary" href="${photo['download']}"><i class="icon-zoom-in"></i>View</a>
-                <a class="btn" href="${photo['download']}"><i class="icon-download"></i>Download</a>
-              </p>
+              <div class="caption">
+                <h5>${photo['date'] if photo['date'] else 'Unknown date'}</h5>
+                <p>
+                  <a class="btn btn-primary" href="${photo['download']}"><i class="icon-zoom-in"></i>View</a>
+                  <a class="btn" href="${photo['download']}"><i class="icon-download"></i>Download</a>
+                </p>
+              </div>
             </div>
           </li>
         </ul>

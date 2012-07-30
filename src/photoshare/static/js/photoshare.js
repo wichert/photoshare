@@ -20,6 +20,7 @@ var UploadItem = Backbone.Model.extend({
             context: this,
             xhr: this._makeXHR,
             data: data,
+            contentType: false,
             processData: false,
             dataType: "json",
             error: this.onError,
@@ -38,7 +39,11 @@ var UploadItem = Backbone.Model.extend({
     },
 
     onProgress: function(event) {
-        this.set({progress: (event.loaded / event.total)*100});
+        var data = {progress: (event.loaded / event.total)*100};
+        if (data.progress===100) {
+            data.status = "processing";
+        }
+        this.set(data);
     }
 });
 
@@ -104,7 +109,7 @@ var UploadPanelView = Backbone.View.extend({
 
     queueUpload: function(item) {
         var view = new UploadItemView({model: item});
-        this.$("#upload-queue").prepend(view.render().el);
+        $("#upload-queue").prepend(view.render().el);
         item.upload();
 
     },
@@ -115,8 +120,7 @@ var UploadPanelView = Backbone.View.extend({
         event.preventDefault();
 	for (i=0; i<transfer.files.length; i++) {
             file = transfer.files[i];
-            if (file.name.match(/\.zip$/) !== null ||
-                    file.type.match(/^image\//) !== null) {
+            if (file.type.match(/^image\//) !== null) {
                 model = new UploadItem({file: file});
                 ActiveUploads.add([model]);
             } else {

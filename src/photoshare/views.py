@@ -1,9 +1,13 @@
+import datetime
 from pyramid.httpexceptions import HTTPFound
+from pyramid.security import authenticated_userid
 from pyramid.security import remember
 from pyramid.view import forbidden_view_config
 from pyramid.view import view_config
 from s4u.sqlalchemy import meta
+import PIL.Image
 from .models import User
+from .models import Photo
 
 def users():
     users = meta.Session.query(User).all()
@@ -37,6 +41,21 @@ def upload_view(request):
 @view_config(route_name='upload', renderer='json', 
         request_method='POST', permission='authenticated')
 def upload(request):
+    upload = request.POST['file']
+    user_id = authenticated_userid(request)
+    user = meta.Session.query(User).get(user_id)
+    photo = Photo(upload.file.read(), upload.filename)
+    user.photos.append(photo)
+    upload.file.seek(0)
+    img = PIL.Image.open(upload.file)
+    if hasattr(img, '_getexif'):
+        tags = img._getexif()
+        for date_tag in [36867, 36868, 306]:  # Possible timestamps
+            value = tags.get(date_tag)
+            if value is not None:
+                photo.exif_date = datetime.datetime.strptime(
+                        value, '%Y:%m:%d %H:%M:%S')
+                break
     return {'message': 'ok'}
 
 
@@ -51,7 +70,12 @@ def browse(request):
 def browse_user(request):
     user_id = int(request.matchdict['id'])
     user = meta.Session.query(User).get(user_id)
-    return {'users': users(), 'user': user, 'photos': []}
+    static_url = request.static_url
+    photos = [{'download': static_url(photo.filesystem_path),
+               'thumbnail': static_url(photo.scale(width=260, height=180, crop=True).filesystem_path),
+               'date': photo.exif_date}
+              for photo in user.photos]
+    return {'users': users(), 'user': user, 'photos': photos}
 
 
 @view_config(route_name='api-photos', permission='authenticated',

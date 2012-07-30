@@ -1,4 +1,6 @@
 from pyramid.config import Configurator
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.security import Allow
 from pyramid.security import Authenticated
 
@@ -15,7 +17,17 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings)
     config.include('s4u.sqlalchemy')
+    config.include('s4u.image')
     config.set_root_factory(DefaultRoot)
+    config.set_authentication_policy(
+            AuthTktAuthenticationPolicy('photoshare',
+                include_ip=False,
+                max_age=60 * 60 * 24 * 7,
+                timeout=60 * 60 * 24 * 7,
+                reissue_time=60 * 60 * 24,
+                http_only=True))
+    config.set_authorization_policy(
+            ACLAuthorizationPolicy())
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('login', '/login')

@@ -13,6 +13,8 @@ requires = [
     'pyramid_tm',
     'zope.sqlalchemy',
     's4u.sqlalchemy',
+    's4u.image',
+    's4u.upgrade',
     'waitress',
     ]
 
@@ -39,8 +41,6 @@ setup(name='photoshare',
       entry_points="""\
       [paste.app_factory]
       main = photoshare:main
-      [console_scripts]
-      initialize_photoshare_db = photoshare.scripts.initializedb:main
       """,
       )
 
