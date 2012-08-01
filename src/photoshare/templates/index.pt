@@ -48,7 +48,7 @@
           </div>
 
           <div class="well dropbox">
-            Drag and drop photos here to upload.
+            Drag and drop photos in this window to upload them.
           </div>
 
           <div id="upload-panel">

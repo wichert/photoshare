@@ -97,13 +97,8 @@ var UploadPanelView = Backbone.View.extend({
     },
 
     initialize: function() {
-        method = _.bind(this.onDrop, this);
-        $(document).on("drop", ".dropbox", method);
-        $(document).on("dragenter", ".dropbox", function() {
-            $(this).addClass("hover");
-        }).on("dragleave", ".dropbox", function() {
-            $(this).removeClass("hover");
-        });
+        $(document).on("drop", _.bind(this.onDrop, this));
+        $(document).on("dragover", _.bind(this.onDragOver, this));
         ActiveUploads.bind("add", this.queueUpload, this);
     },
 
@@ -112,6 +107,14 @@ var UploadPanelView = Backbone.View.extend({
         $("#upload-queue").append(view.render().el);
         item.upload();
 
+    },
+
+    onDragOver: function(e) {
+        var dataTransfer = e.dataTransfer = e.originalEvent.dataTransfer;
+        if (dataTransfer) {
+            dataTransfer.dropEffect = 'copy';
+        }
+        e.preventDefault();
     },
 
     onDrop: function(event) {
