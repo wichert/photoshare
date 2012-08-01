@@ -107,7 +107,7 @@ def download_user(context, request):
 
 
 @view_config(route_name='download-photo', context=Photo,
-        request_method='GET', permission='delete')
+        request_method='GET', permission='authenticated')
 def download_photo(context, request):
     response = request.response
     response.content_disposition = 'attachment; filename=%s' % \
